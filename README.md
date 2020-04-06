@@ -2,7 +2,7 @@
 
 ### Requirements
 
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+* [Heroku](https://hidden-bastion-38575.herokuapp.com/)
 
 ### Install
 
