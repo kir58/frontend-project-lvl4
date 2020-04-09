@@ -1,13 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Channels from './Channels';
+import Chat from './Chat';
+import getUserName from '../../lib/getUserName';
 
-export default (gon) => {
-  ReactDOM.render(
-    <div>
-      <Channels channels={gon.channels} />
-    </div>,
-    document.getElementById('chat'),
-  );
-};
+export const UserContext = React.createContext();
+
+export default () => (
+  <div className="row h-100 pb-3">
+    <UserContext.Provider value={getUserName()}>
+      <Channels />
+      <Chat />
+    </UserContext.Provider>
+  </div>
+);

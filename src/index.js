@@ -1,21 +1,35 @@
+/* eslint-disable react/jsx-filename-extension */
 // @ts-nocheck
 
-
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import gon from 'gon';
+import io from 'socket.io-client';
+import App from './components/App';
+import rootReducer from './reducers';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import gon from 'gon';
+import { messageRecieved } from './reducers/messages';
 import '../assets/application.scss';
 
-import App from './components/App';
-
-// import faker from 'faker';
-
-// import cookies from 'js-cookie';
-// import io from 'socket.io-client';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
-App(gon);
-console.log('it works!');
-console.log('gon', gon);
+
+
+const store = configureStore({
+  reducer: rootReducer,
+});
+
+const socket = io();
+socket.on('newMessage', (data) => store.dispatch(messageRecieved(data)));
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('chat'),
+);
