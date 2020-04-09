@@ -25,7 +25,8 @@ const Chat = ({
     },
 
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      const message = { data: { attributes: values } };
+      const attributes = { message: values.message, name: userName };
+      const message = { data: { attributes } };
       sendMessage({ message, channelId: currentChannelId });
       setSubmitting(false);
       resetForm();
@@ -33,9 +34,9 @@ const Chat = ({
   });
 
 
-  const renderMessage = ({ message, id }) => (
+  const renderMessage = ({ message, id, name }) => (
     <div key={id}>
-      <b>{userName}</b>
+      <b>{name}</b>
       {`: ${message}`}
     </div>
   );
