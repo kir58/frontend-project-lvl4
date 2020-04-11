@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import gon from 'gon';
 
-const channels = createSlice({
+const currentChannelId = createSlice({
   name: 'currentChannelId',
   initialState: gon.currentChannelId,
   reducers: {
-    changeCurrentChannel(state, action) {
-      // const { data: { attributes } } = action.payload;
-      // state.push(attributes);
+    changeChannel(state, action) {
+      return action.payload;
     },
   },
 });
 
-export const { changeCurrentChannel } = channels.actions;
+export const { changeChannel } = currentChannelId.actions;
 
-export default channels.reducer;
+export default currentChannelId.reducer;

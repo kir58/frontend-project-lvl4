@@ -44,7 +44,9 @@ const Chat = ({
   const renderMessages = () => (
     <div id="messages-box" className="chat-messages overflow-auto mb-3">
       <div>
-        {messages.map((item) => renderMessage(item))}
+        {messages
+          .filter((item) => item.channelId === currentChannelId)
+          .map((item) => renderMessage(item))}
       </div>
     </div>
   );
