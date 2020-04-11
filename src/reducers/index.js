@@ -1,12 +1,8 @@
 import { combineReducers } from 'redux';
-import messages from './messages';
-import messageRequest from './messageRequest';
-import channels from './channels';
-import currentChannelId from './currentChannelId';
+import messagesInfo from './messages';
+import channelsInfo from './channels';
 
 export default combineReducers({
-  messages,
-  messageRequest,
-  channels,
-  currentChannelId,
+  messagesInfo,
+  channelsInfo,
 });

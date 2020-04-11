@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 import { useFormik } from 'formik';
 import { UserContext } from './App';
-import { sendMessage } from '../reducers/messageRequest';
+import { messagesAction } from '../reducers/messages';
 
 const mapStateToProps = (state) => ({
-  messages: state.messages,
-  messageRequest: state.messageRequest,
-  currentChannelId: state.currentChannelId,
+  messages: state.messagesInfo.messages,
+  messageRequest: state.messagesInfo.messageRequest,
+  currentChannelId: state.channelsInfo.currentChannelId,
 });
 
-const mapDispatch = { sendMessage };
+const mapDispatch = { sendMessage: messagesAction.sendMessage };
 
 const Chat = ({
   messages, messageRequest, sendMessage, currentChannelId,
