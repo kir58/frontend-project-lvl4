@@ -4,8 +4,8 @@ import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import cn from 'classnames';
 import { useFormik } from 'formik';
-import { UserContext } from './App';
-import { messagesAction } from '../reducers/messages';
+import UserContext from '../UserContex';
+import { messagesAction } from '../slices/messages';
 
 const mapStateToProps = (state) => ({
   messages: state.messagesInfo.messages,
@@ -53,11 +53,15 @@ const Chat = ({
 
   const renderInput = () => {
     const { type, text } = messageRequest;
-    const invalidHtml = type === 'sendMessages/rejected' && <div className="d-block invalid-feedback">{text}</div>;
+    const messageStatusClasses = cn({
+      'd-block': true,
+      'invalid-feedback': type === 'sendMessage/rejected',
+      'text-warning': type === 'sendMessage/pending',
+    });
 
     const inputCLass = cn({
       'form-control': true,
-      'is-invalid': type === 'sendMessages/rejected',
+      'is-invalid': type === 'sendMessage/rejected',
     });
 
     return (
@@ -75,7 +79,7 @@ const Chat = ({
                 required
               />
             </div>
-            {invalidHtml}
+            <div className={messageStatusClasses}>{text}</div>
           </div>
         </form>
       </div>

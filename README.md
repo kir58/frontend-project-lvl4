@@ -1,18 +1,8 @@
-[![Github Actions Status](https://github.com/hexlet-components/projects-frontend-l4-server/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-components/projects-frontend-l4-server/actions)
+[![Github Actions Status](https://github.com/hexlet-components/projects-frontend-l4-server/workflows/Node%20CI/badge.svg)](https://github.com/kir58/frontend-project-lvl4/actions)
 
-### Requirements
+[![Maintainability](https://api.codeclimate.com/v1/badges/fb67686e41af402b9133/maintainability)](https://codeclimate.com/github/kir58/frontend-project-lvl4/maintainability)
 
-* [Heroku](https://hidden-bastion-38575.herokuapp.com/)
+### Simple Chat
 
-### Install
+* [Chat Here](https://hidden-bastion-38575.herokuapp.com/)
 
-```sh
-$ make install
-```
-
-### Run
-
-```sh
-$ make start
-# open http://localhost:5000
-```

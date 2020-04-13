@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 import axios from 'axios';
-import gon from 'gon';
 import routes from '../routes';
+
 
 export const sendMessage = createAsyncThunk(
   'sendMessage',
@@ -13,7 +15,7 @@ export const sendMessage = createAsyncThunk(
 
 const messagesInfo = createSlice({
   name: 'messagesInfo',
-  initialState: { messages: gon.messages, messageRequest: { type: 'waiting', text: '' } },
+  initialState: { messages: [], messageRequest: { type: 'waiting', text: '' } },
   reducers: {
     messageRecieved(state, action) {
       const { data: { attributes } } = action.payload;
@@ -21,9 +23,9 @@ const messagesInfo = createSlice({
     },
   },
   extraReducers: {
-    [sendMessage.pending]: (state, action) => ({ ...state, messageRequest: { type: action.type, text: 'loading...' } }),
-    [sendMessage.fulfilled]: (state, action) => ({ ...state, messageRequest: { type: action.type, text: '' } }),
-    [sendMessage.rejected]: (state, action) => ({ ...state, messageRequest: { type: action.type, text: 'Network Error' } }),
+    [sendMessage.pending]: (state, action) => { state.messageRequest = { type: action.type, text: i18next.t('request.load') }; },
+    [sendMessage.fulfilled]: (state, action) => { state.messageRequest = { type: action.type, text: '' }; },
+    [sendMessage.rejected]: (state, action) => { state.messageRequest = { type: action.type, text: i18next.t('request.error') }; },
   },
 });
 
