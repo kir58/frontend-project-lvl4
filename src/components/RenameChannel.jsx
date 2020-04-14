@@ -9,6 +9,7 @@ import { channelsActions } from '../slices/channels';
 
 const mapStateToProps = (state) => ({
   pickedChannelStatus: state.channelsInfo.pickedChannelStatus,
+  channels: state.channelsInfo.channels,
 
 });
 
@@ -20,6 +21,7 @@ const mapDispatch = {
 const RenameChannel = ({
   id,
   currentName,
+  channels,
   pickedChannelStatus: { type, text },
   changeChannelStatus,
   renameChannel,
@@ -46,9 +48,13 @@ const RenameChannel = ({
     },
 
     onSubmit: ({ name }, { setSubmitting, resetForm }) => {
-      if (currentName === name) {
+      const isChannelExist = channels.some((channel) => channel.name === name);
+      if (isChannelExist) {
+        const status = { type: 'channelExist', text: t('channels.existingChannelName') };
+        changeChannelStatus({ status });
+      } else if (currentName === name) {
         const status = { type: 'channelExist', text: t('channels.equalName') };
-        changeChannelStatus(status);
+        changeChannelStatus({ status });
       } else {
         const attributes = { name };
         const newChannel = { data: { attributes } };
@@ -66,7 +72,8 @@ const RenameChannel = ({
   });
 
   const openModal = () => {
-    changeChannelStatus({ type: 'waiting', text: '' });
+    const status = { type: 'waiting', text: '' };
+    changeChannelStatus({ status });
     handleShow();
   };
 

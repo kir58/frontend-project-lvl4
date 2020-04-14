@@ -40,16 +40,28 @@ const channelsInfo = createSlice({
   },
   reducers: {
     changeChannel(state, action) {
-      return {
-        ...state,
-        currentChannelId: action.payload,
-      };
+      state.currentChannelId = action.payload.id;
     },
     changeChannelStatus(state, action) {
-      return {
-        ...state,
-        pickedChannelStatus: action.payload,
-      };
+      state.pickedChannelStatus = action.payload.status;
+    },
+
+    reciveAddedChanels(state, action) {
+      const { data: { attributes } } = action.payload;
+      state.channels.push(attributes);
+    },
+
+    reciveRemovedChanels(state, action) {
+      const { payload: { data: { id } } } = action;
+      if (state.currentChannelId === id) {
+        state.currentChannelId = 1;
+      }
+      state.channels = state.channels.filter((channel) => channel.id !== id);
+    },
+
+    reciveRenamedChanels(state, action) {
+      const { payload: { data: { id, attributes } } } = action;
+      state.channels = state.channels.map((channel) => (channel.id === id ? attributes : channel));
     },
   },
   extraReducers: {
@@ -58,9 +70,7 @@ const channelsInfo = createSlice({
     },
 
     [addChannel.fulfilled]: (state, action) => {
-      const { data: { attributes } } = action.payload;
       state.pickedChannelStatus = { type: `${action.type.split('/')[1]}`, text: '' };
-      state.channels.push(attributes);
     },
 
     [addChannel.rejected]: (state, action) => {
@@ -68,11 +78,6 @@ const channelsInfo = createSlice({
     },
 
     [removeChannel.fulfilled]: (state, action) => {
-      const { payload: { data: { id } } } = action;
-      if (state.currentChannelId === id) {
-        state.currentChannelId = 1;
-      }
-      state.channels = state.channels.filter((channel) => channel.id !== id);
       state.pickedChannelStatus = { type: `${action.type.split('/')[1]}`, text: '' };
     },
 
@@ -81,8 +86,6 @@ const channelsInfo = createSlice({
     },
 
     [renameChannel.fulfilled]: (state, action) => {
-      const { payload: { data: { id, attributes } } } = action;
-      state.channels = state.channels.map((channel) => (channel.id === id ? attributes : channel));
       state.pickedChannelStatus = { type: `${action.type.split('/')[1]}`, text: '' };
     },
 
@@ -99,6 +102,9 @@ const channelsInfo = createSlice({
 export const channelsActions = {
   changeChannel: channelsInfo.actions.changeChannel,
   changeChannelStatus: channelsInfo.actions.changeChannelStatus,
+  reciveAddedChanels: channelsInfo.actions.reciveAddedChanels,
+  reciveRemovedChanels: channelsInfo.actions.reciveRemovedChanels,
+  reciveRenamedChanels: channelsInfo.actions.reciveRenamedChanels,
   addChannel,
   removeChannel,
   renameChannel,

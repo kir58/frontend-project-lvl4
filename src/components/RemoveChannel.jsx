@@ -26,7 +26,8 @@ const RemoveChannel = ({
   const { t } = useTranslation();
 
   const openModal = () => {
-    changeChannelStatus({ type: 'waiting', text: '' });
+    const status = { type: 'waiting', text: '' };
+    changeChannelStatus({ status });
     handleShow();
   };
 

@@ -71,7 +71,7 @@ export default (app, io, defaultState = {}) => {
       const channelId = Number(req.params.id);
       state.channels = state.channels.filter((c) => c.id !== channelId);
       state.messages = state.messages.filter((m) => m.channelId !== channelId);
-      reply.code(200);
+      reply.code(204);
       const data = {
         data: {
           type: 'channels',

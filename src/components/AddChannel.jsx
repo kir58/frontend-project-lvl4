@@ -46,7 +46,7 @@ const AddChannel = ({
       const isChannelExist = channels.some((channel) => channel.name === name);
       if (isChannelExist) {
         const status = { type: 'channelExist', text: t('channels.existingChannelName') };
-        changeChannelStatus(status);
+        changeChannelStatus({ status });
       } else {
         const attributes = { name };
         const newChannel = { data: { attributes } };
@@ -65,7 +65,8 @@ const AddChannel = ({
   });
 
   const openModal = () => {
-    changeChannelStatus({ type: 'waiting', text: '' });
+    const status = { type: 'waiting', text: '' };
+    changeChannelStatus({ status });
     handleShow();
   };
 

@@ -28,9 +28,7 @@ const Channels = ({
     active: id === currentChannelId,
   });
 
-  const handleChangeChannel = (id) => () => {
-    changeChannel(id);
-  };
+  const handleChangeChannel = (id) => () => changeChannel({ id });
 
   return (
     <div className="col-3 border-right">

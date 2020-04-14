@@ -9,6 +9,8 @@ import gon from 'gon';
 import App from './components/App';
 import rootReducer from './slices';
 import { messagesAction } from './slices/messages';
+import { channelsActions } from './slices/channels';
+
 import getUserName from '../lib/getUserName';
 import UserContext from './UserContex';
 
@@ -28,6 +30,9 @@ export default () => {
 
   const socket = io();
   socket.on('newMessage', (data) => store.dispatch(messagesAction.messageRecieved(data)));
+  socket.on('newChannel', (data) => store.dispatch(channelsActions.reciveAddedChanels(data)));
+  socket.on('removeChannel', (data) => store.dispatch(channelsActions.reciveRemovedChanels(data)));
+  socket.on('renameChannel', (data) => store.dispatch(channelsActions.reciveRenamedChanels(data)));
 
   ReactDOM.render(
     <Provider store={store}>

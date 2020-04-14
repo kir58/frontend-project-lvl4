@@ -75,7 +75,7 @@ test('delete /channels/:id', async () => {
     method: 'DELETE',
     url: buildUrl('channels/100'),
   });
-  expect(response.statusCode).toEqual(200);
+  expect(response.statusCode).toEqual(204);
 });
 
 test('patch /channels/:id', async () => {
