@@ -1,67 +1,59 @@
-/* eslint-disable import/no-cycle */
-/* eslint-disable import/named */
 import React, { useContext } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cn from 'classnames';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import UserContext from '../UserContex';
-import { messagesAction } from '../slices/messages';
+import { getCurrentChannelMessages, getCurrentChannelId } from '../selectors';
+import routes from '../routes';
+import Spiner from './Spiner';
 
-const mapStateToProps = (state) => ({
-  messages: state.messagesInfo.messages,
-  messageRequest: state.messagesInfo.messageRequest,
-  currentChannelId: state.channelsInfo.currentChannelId,
-});
 
-const mapDispatch = { sendMessage: messagesAction.sendMessage };
+const generateOnSubmit = (channelId, userName, getText) => async (
+  { message }, { setStatus, setFieldError },
+) => {
+  const attributes = { message, name: userName };
+  const newMessage = { data: { attributes } };
 
-const Chat = ({
-  messages, messageRequest, sendMessage, currentChannelId,
-}) => {
+  setStatus('loading');
+  try {
+    const url = routes.channelMessagesPath(channelId);
+    await axios.post(url, newMessage);
+    setStatus('');
+  } catch (e) {
+    setFieldError('nameError', getText('request.error'));
+    setStatus('');
+  }
+};
+
+
+const Chat = () => {
+  const { t } = useTranslation();
   const userName = useContext(UserContext);
-  const formik = useFormik({
-    initialValues: {
-      message: '',
-    },
 
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      const attributes = { message: values.message, name: userName };
-      const message = { data: { attributes } };
-      sendMessage({ message, channelId: currentChannelId });
-      setSubmitting(false);
-      resetForm();
-    },
-  });
+  const messages = useSelector((state) => getCurrentChannelMessages(state));
+  const currentChannelId = useSelector((state) => getCurrentChannelId(state));
 
-
-  const renderMessage = ({ message, id, name }) => (
-    <div key={id}>
-      <b>{name}</b>
-      {`: ${message}`}
-    </div>
-  );
+  const formik = useFormik({ initialValues: { message: '' }, onSubmit: generateOnSubmit(currentChannelId, userName, t) });
 
   const renderMessages = () => (
     <div id="messages-box" className="chat-messages overflow-auto mb-3">
       <div>
-        {messages
-          .filter((item) => item.channelId === currentChannelId)
-          .map((item) => renderMessage(item))}
+        {messages.map(({ message, id, name }) => (
+          <div key={id}>
+            <b>{name}</b>
+            {`: ${message}`}
+          </div>
+        ))}
       </div>
     </div>
   );
 
   const renderInput = () => {
-    const { type, text } = messageRequest;
-    const messageStatusClasses = cn({
-      'd-block': true,
-      'invalid-feedback': type === 'sendMessage/rejected',
-      'text-warning': type === 'sendMessage/pending',
-    });
-
     const inputCLass = cn({
       'form-control': true,
-      'is-invalid': type === 'sendMessage/rejected',
+      'is-invalid': !!formik.errors.nameError,
     });
 
     return (
@@ -79,7 +71,8 @@ const Chat = ({
                 required
               />
             </div>
-            <div className={messageStatusClasses}>{text}</div>
+            <Spiner show={formik.status === 'loading'} />
+            <div className="d-block invalid-feedback">{formik.errors.nameError}</div>
           </div>
         </form>
       </div>
@@ -96,4 +89,4 @@ const Chat = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatch)(Chat);
+export default Chat;

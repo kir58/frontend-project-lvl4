@@ -30,9 +30,9 @@ export default () => {
 
   const socket = io();
   socket.on('newMessage', (data) => store.dispatch(messagesAction.messageRecieved(data)));
-  socket.on('newChannel', (data) => store.dispatch(channelsActions.reciveAddedChanels(data)));
-  socket.on('removeChannel', (data) => store.dispatch(channelsActions.reciveRemovedChanels(data)));
-  socket.on('renameChannel', (data) => store.dispatch(channelsActions.reciveRenamedChanels(data)));
+  socket.on('newChannel', (data) => store.dispatch(channelsActions.receiveAddedChanel(data)));
+  socket.on('removeChannel', (data) => store.dispatch(channelsActions.receiveRemovedChanel(data)));
+  socket.on('renameChannel', (data) => store.dispatch(channelsActions.receiveRenamedChanel(data)));
 
   ReactDOM.render(
     <Provider store={store}>
