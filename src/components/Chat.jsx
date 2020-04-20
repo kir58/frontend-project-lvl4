@@ -11,7 +11,7 @@ import Spiner from './Spiner';
 
 
 const generateOnSubmit = (channelId, userName, getText) => async (
-  { message }, { setStatus, setFieldError },
+  { message }, { setStatus, setFieldError, resetForm },
 ) => {
   const attributes = { message, name: userName };
   const newMessage = { data: { attributes } };
@@ -25,6 +25,7 @@ const generateOnSubmit = (channelId, userName, getText) => async (
     setFieldError('nameError', getText('request.error'));
     setStatus('');
   }
+  resetForm();
 };
 
 
