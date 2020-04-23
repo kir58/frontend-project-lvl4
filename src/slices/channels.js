@@ -15,12 +15,12 @@ const channelsInfo = createSlice({
       state.pickedChannelStatus = action.payload.status;
     },
 
-    receiveAddedChanel(state, action) {
+    addedChanel(state, action) {
       const { data: { attributes } } = action.payload;
       state.channels.push(attributes);
     },
 
-    receiveRemovedChanel(state, action) {
+    removedChanel(state, action) {
       const { payload: { data: { id } } } = action;
       if (state.currentChannelId === id) {
         state.currentChannelId = 1;
@@ -28,7 +28,7 @@ const channelsInfo = createSlice({
       state.channels = state.channels.filter((channel) => channel.id !== id);
     },
 
-    receiveRenamedChanel(state, action) {
+    renamedChanel(state, action) {
       const { payload: { data: { id, attributes } } } = action;
       const item = state.channels.find((channel) => channel.id === id);
       item.name = attributes.name;
@@ -39,9 +39,9 @@ const channelsInfo = createSlice({
 export const channelsActions = {
   changeChannel: channelsInfo.actions.changeChannel,
   changeChannelStatus: channelsInfo.actions.changeChannelStatus,
-  receiveAddedChanel: channelsInfo.actions.receiveAddedChanel,
-  receiveRemovedChanel: channelsInfo.actions.receiveRemovedChanel,
-  receiveRenamedChanel: channelsInfo.actions.receiveRenamedChanel,
+  addedChanel: channelsInfo.actions.addedChanel,
+  removedChanel: channelsInfo.actions.removedChanel,
+  renamedChanel: channelsInfo.actions.renamedChanel,
 };
 
 export default channelsInfo.reducer;

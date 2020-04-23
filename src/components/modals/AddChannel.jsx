@@ -18,17 +18,14 @@ const mapDispatch = {
 };
 
 const generateOnSubmit = ({ onHide }, getText) => async (
-  { name }, { setStatus, setFieldError },
+  { name }, { setFieldError },
 ) => {
   const attributes = { name };
   const newChannel = { data: { attributes } };
-  setStatus('loading');
   try {
     await axios.post(routes.channelsPath(), newChannel);
-    setStatus('');
     onHide();
   } catch (e) {
-    setStatus('');
     setFieldError('nameError', getText('request.error'));
   }
 };
@@ -77,7 +74,7 @@ const AddChannel = (props) => {
                 ref={inputRef}
               />
             </div>
-            <Spiner show={formik.status === 'loading'} />
+            <Spiner show={formik.isSubmitting} />
             <div className="d-block invalid-feedback">{formik.errors.nameError}</div>
           </div>
           <Button variant="secondary mr-3" onClick={onHide}>

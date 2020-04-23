@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { channelsActions } from '../slices/channels';
 import { modalAction } from '../slices/modalInfo';
-import { getCurrentChannelId, getModalInfo, getChannels } from '../selectors';
 import getModal from './modals/index.js';
 
 
-const renderModal = ({ type }) => {
+const renderModal = (type) => {
   if (!type) {
     return null;
   }
@@ -21,9 +20,8 @@ const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const currentChannelId = useSelector((state) => getCurrentChannelId(state));
-  const channels = useSelector((state) => getChannels(state));
-  const modalInfo = useSelector((state) => getModalInfo(state));
+  const { currentChannelId, channels } = useSelector((state) => state.channelsInfo);
+  const { type } = useSelector((state) => state.modalInfo);
 
   const getChannelClasses = (id) => cn({
     'nav-link btn btn-block': true,
@@ -67,7 +65,7 @@ const Channels = () => {
       <ul className="nav flex-column nav-pills nav-fill">
         {channels.map((item) => rednerItem(item))}
       </ul>
-      {renderModal(modalInfo)}
+      {renderModal(type)}
     </div>
   );
 };

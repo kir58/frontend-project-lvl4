@@ -20,18 +20,15 @@ const mapDispatch = {
 
 const generateOnSubmit = ({ onHide, currentItem }, getText) => async (
   { name },
-  { setStatus, setFieldError },
+  { setFieldError },
 ) => {
   const attributes = { name };
   const newChannel = { data: { attributes } };
-  setStatus('loading');
   try {
     await axios.patch(routes.channelPath(currentItem.id), newChannel);
-    setStatus('');
     onHide();
   } catch (e) {
     setFieldError('nameError', getText('request.error'));
-    setStatus('');
   }
 };
 
@@ -80,7 +77,7 @@ const renameChannel = (props) => {
                 ref={inputRef}
               />
             </div>
-            <Spiner show={formik.status === 'loading'} />
+            <Spiner show={formik.isSubmitting} />
             <div className="d-block invalid-feedback">{formik.errors.nameError}</div>
           </div>
           <Button variant="secondary mr-3" onClick={onHide}>

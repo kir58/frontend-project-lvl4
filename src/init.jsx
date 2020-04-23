@@ -18,11 +18,10 @@ export default () => {
   const store = configureStore({
     reducer: rootReducer,
     preloadedState: {
-      messagesInfo: { messages: gon.messages, messageRequest: { type: 'waiting', text: '' } },
+      messagesInfo: { messages: gon.messages },
       channelsInfo: {
         channels: gon.channels,
         currentChannelId: gon.currentChannelId,
-        pickedChannelStatus: { type: 'waiting', text: '' },
       },
     },
   });
@@ -30,9 +29,9 @@ export default () => {
 
   const socket = io();
   socket.on('newMessage', (data) => store.dispatch(messagesAction.messageRecieved(data)));
-  socket.on('newChannel', (data) => store.dispatch(channelsActions.receiveAddedChanel(data)));
-  socket.on('removeChannel', (data) => store.dispatch(channelsActions.receiveRemovedChanel(data)));
-  socket.on('renameChannel', (data) => store.dispatch(channelsActions.receiveRenamedChanel(data)));
+  socket.on('newChannel', (data) => store.dispatch(channelsActions.addedChanel(data)));
+  socket.on('removeChannel', (data) => store.dispatch(channelsActions.removedChanel(data)));
+  socket.on('renameChannel', (data) => store.dispatch(channelsActions.renamedChanel(data)));
 
   ReactDOM.render(
     <Provider store={store}>

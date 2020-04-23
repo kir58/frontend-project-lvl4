@@ -5,25 +5,21 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import UserContext from '../UserContex';
-import { getCurrentChannelMessages, getCurrentChannelId } from '../selectors';
 import routes from '../routes';
 import Spiner from './Spiner';
 
 
 const generateOnSubmit = (channelId, userName, getText) => async (
-  { message }, { setStatus, setFieldError, resetForm },
+  { message }, { setFieldError, resetForm },
 ) => {
   const attributes = { message, name: userName };
   const newMessage = { data: { attributes } };
 
-  setStatus('loading');
   try {
     const url = routes.channelMessagesPath(channelId);
     await axios.post(url, newMessage);
-    setStatus('');
   } catch (e) {
     setFieldError('nameError', getText('request.error'));
-    setStatus('');
   }
   resetForm();
 };
@@ -33,8 +29,9 @@ const Chat = () => {
   const { t } = useTranslation();
   const userName = useContext(UserContext);
 
-  const messages = useSelector((state) => getCurrentChannelMessages(state));
-  const currentChannelId = useSelector((state) => getCurrentChannelId(state));
+  const { currentChannelId } = useSelector((state) => state.channelsInfo);
+  const messagesInfo = useSelector((state) => state.messagesInfo);
+  const messages = messagesInfo.messages.filter(({ channelId }) => channelId === currentChannelId);
 
   const formik = useFormik({ initialValues: { message: '' }, onSubmit: generateOnSubmit(currentChannelId, userName, t) });
 
@@ -72,7 +69,7 @@ const Chat = () => {
                 required
               />
             </div>
-            <Spiner show={formik.status === 'loading'} />
+            <Spiner show={formik.isSubmitting} />
             <div className="d-block invalid-feedback">{formik.errors.nameError}</div>
           </div>
         </form>
