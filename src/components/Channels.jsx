@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -24,35 +26,42 @@ const Channels = () => {
   const { type } = useSelector((state) => state.modalInfo);
 
   const getChannelClasses = (id) => cn({
-    'nav-link btn btn-block': true,
+    'nav-link btn btn-block d-flex': true,
     active: id === currentChannelId,
+  });
+
+  const getBtnClasses = (id) => cn('btn btn-link p-0 ml-auto ', {
+    'text-light': id === currentChannelId,
   });
 
   const handleChangeChannel = (id) => () => dispatch(channelsActions.changeChannel({ id }));
 
   const rednerItem = (item) => (
     <li className="nav-item d-flex" key={item.id}>
-      <button className={getChannelClasses(item.id)} type="button" onClick={handleChangeChannel(item.id)}>
-        {item.name}
-      </button>
-      {item.removable && (
-      <>
-        <button
-          type="button"
-          className="btn btn-link p-0 ml-auto"
-          onClick={() => dispatch(modalAction.setModalInfo({ type: 'renaming', currentItem: item }))}
-        >
-          &#9998;
-        </button>
-        <button
-          type="button"
-          className="btn btn-link p-0 ml-auto"
-          onClick={() => dispatch(modalAction.setModalInfo({ type: 'removing', currentItem: item }))}
-        >
-          &#65794;
-        </button>
-      </>
-      )}
+      <div
+        className={getChannelClasses(item.id)}
+        onClick={handleChangeChannel(item.id)}
+      >
+        <div>{item.name}</div>
+        {item.removable && (
+        <div className="ml-auto">
+          <button
+            type="button"
+            className={getBtnClasses(item.id)}
+            onClick={() => dispatch(modalAction.setModalInfo({ type: 'renaming', currentItem: item }))}
+          >
+            &#9998;
+          </button>
+          <button
+            type="button"
+            className={getBtnClasses(item.id)}
+            onClick={() => dispatch(modalAction.setModalInfo({ type: 'removing', currentItem: item }))}
+          >
+            &#65794;
+          </button>
+        </div>
+        )}
+      </div>
     </li>
   );
 
