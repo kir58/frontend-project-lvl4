@@ -30,9 +30,8 @@ const Chat = () => {
   const userName = useContext(UserContext);
 
   const { currentChannelId } = useSelector((state) => state.channelsInfo);
-  const messagesInfo = useSelector((state) => state.messagesInfo);
-  const messages = messagesInfo.messages.filter(({ channelId }) => channelId === currentChannelId);
-
+  const messages = useSelector((state) => state.messagesInfo.messages
+    .filter(({ channelId }) => channelId === currentChannelId));
   const formik = useFormik({ initialValues: { message: '' }, onSubmit: generateOnSubmit(currentChannelId, userName, t) });
 
   const renderMessages = () => (
